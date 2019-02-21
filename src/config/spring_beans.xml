@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!-- StringPrinter 클래스를 bean으로 등록 -->
+	<bean id="sPrinter" class="myspring.di.xml.StringPrinter" />
+	<!-- ConsolePrinter 클래서를 bean으로 등록 -->
+	<bean id="cPrinter" class="myspring.di.xml.ConsolePrinter" />
+	<!-- Hello 클래스를 bean으로 등록 -->
+	<bean id="hello" class="myspring.di.xml.Hello">
+		<!-- setter injection -->
+		<property name="name" value="Spring" />
+		<property name="printer" ref="sPrinter" />
+	</bean>
+
+	<bean id="helloC" class="myspring.di.xml.Hello">
+		<!-- constructor injection -->
+		<constructor-arg index="0" value="생성자" />
+		<constructor-arg index="1" ref="cPrinter" />
+	</bean>
+
+	<!-- BasicDatasource 설정 -->
+	<bean id="dataSource"
+		class="org.apache.commons.dbcp2.BasicDataSource"
+		p:driverClassName="${db.driver}" p:url="${db.url}"
+		p:username="${db.username}" p:password="${db.password}" />
+
+	<context:property-placeholder
+		location="classpath:config/db.properties" />
+
+	<!--MyBatis Spring설정파일 -->
+	<bean id="sqlSessionFactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation"
+			value="classpath:config/SqlMapConfig.xml" />
+		<property name="mapperLocations">
+			<list>
+				<value>classpath:config/*Mapper.xml</value> <!-- Mapper.xml로 끝나는 파일 모두 적용 -->
+			</list>
+		</property>
+	</bean>
+
+	<!-- SqlSessionTemplete -->
+	<bean id="sqlSession"
+		class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactory" />
+	</bean>
+</beans>
+	
