@@ -1,20 +1,23 @@
 package myspring.di.annot;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-@Component("helloA")
+
 public class Hello {
 	//<property name="name" value="어노테이션"/>
-	//@Value("어노테이션")
+	@Value("어노테이션")
 	String name;
 
 	//@Autowired
 	//@Qualifier("stringPrinter")
 	//<property name="printer" ref="stringPrinter"/>
 //	@Resource(name="${printer1}")
+	@Resource(name="stringPrinter")
 	Printer printer;
 
 	public String sayHello() {
@@ -33,12 +36,15 @@ public class Hello {
 		this.printer = printer;
 	}
 	
-	@Autowired
-	public Hello(@Value("어노테이션") String name,
-			@Qualifier("consolePrinter") Printer printer) {
+//	@Autowired
+//	public Hello(@Value("어노테이션") String name,
+//			@Qualifier("consolePrinter") Printer printer) {
+//		this.name = name;
+//		this.printer = printer;
+//	}
+
+	public Hello(String name,Printer printer) {
 		this.name = name;
 		this.printer = printer;
 	}
 }
-
-

@@ -3,9 +3,24 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
 
+	<!-- AOP 설정 -->
+	<bean id="ptAdvice" class="myspring.aop.xml.PerformanceTraceAdvice"/>
+	<aop:config>
+		<aop:aspect ref="ptAdvice">
+			<aop:around method="trace" pointcut="execution(public * myspring.user..*(..))" />
+		</aop:aspect>
+	</aop:config>
+	
+	<!-- component auto scanning 설정 -->
+	<context:component-scan base-package="myspring.user">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+		
 	<!-- StringPrinter 클래스를 bean으로 등록 -->
 	<bean id="sPrinter" class="myspring.di.xml.StringPrinter" />
 	<!-- ConsolePrinter 클래서를 bean으로 등록 -->
@@ -23,21 +38,22 @@
 		<constructor-arg index="1" ref="cPrinter" />
 	</bean>
 
+	<!-- JDBC -->
+	<context:property-placeholder location="classpath:config/db.properties" />	
+	
 	<!-- BasicDatasource 설정 -->
 	<bean id="dataSource"
 		class="org.apache.commons.dbcp2.BasicDataSource"
-		p:driverClassName="${db.driver}" p:url="${db.url}"
-		p:username="${db.username}" p:password="${db.password}" />
-
-	<context:property-placeholder
-		location="classpath:config/db.properties" />
+		p:driverClassName="${db.driver}" 
+		p:url="${db.url}"
+		p:username="${db.username}" 
+		p:password="${db.password}" />
 
 	<!--MyBatis Spring설정파일 -->
 	<bean id="sqlSessionFactory"
 		class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<property name="configLocation"
-			value="classpath:config/SqlMapConfig.xml" />
+		<property name="configLocation" value="classpath:config/SqlMapConfig.xml" />
 		<property name="mapperLocations">
 			<list>
 				<value>classpath:config/*Mapper.xml</value> <!-- Mapper.xml로 끝나는 파일 모두 적용 -->
@@ -51,4 +67,3 @@
 		<constructor-arg ref="sqlSessionFactory" />
 	</bean>
 </beans>
-	

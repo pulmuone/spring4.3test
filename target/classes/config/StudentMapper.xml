@@ -3,21 +3,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<!-- <mapper namespace="studentNS"> -->
-<mapper namespace="myspring.user.dao.mapper.StudentMapper">
+<mapper namespace="studentNS">
+<!-- <mapper namespace="myspring.user.dao.mapper.StudentMapper"> -->
 
 	<resultMap id="studentDeptResultMap" type="Student">
 		<id property="id" column="stu_id" javaType="Integer" jdbcType="NUMERIC" />
-		<result property="name" column="stu_name" javaType="String"
-			jdbcType="VARCHAR" />
-		<result property="age" column="stu_age" javaType="Integer"
-			jdbcType="NUMERIC" />
-		<result property="grade" column="stu_grade" javaType="String"
-			jdbcType="VARCHAR" />
-		<result property="daynight" column="stu_daynight" javaType="String"
-			jdbcType="VARCHAR" />
-		<association property="dept" column="dept_id" javaType="Dept"
-			resultMap="deptResultMap" />
+		<result property="name" column="stu_name" javaType="String" jdbcType="VARCHAR" />
+		<result property="age" column="stu_age" javaType="Integer" jdbcType="NUMERIC" />
+		<result property="grade" column="stu_grade" javaType="String" jdbcType="VARCHAR" />
+		<result property="daynight" column="stu_daynight" javaType="String" jdbcType="VARCHAR" />
+		<association property="dept" column="dept_id" javaType="Dept" resultMap="deptResultMap" />
 	</resultMap>
 			
 	<resultMap id="studentCourseStatusResultMap" type="Student">
